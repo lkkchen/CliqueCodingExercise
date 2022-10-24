@@ -1,29 +1,13 @@
-import { ObjectType , Field, InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-@ObjectType()
 export class FieldConditionStringInput {
+  @Field({ nullable: true })
   @Field(type => String)
-  eq: string;
+  eq?: string;
 
+  @Field({ nullable: true })
   @Field(type => String)
-  eq_nocase: string;
+  contains?: string;
 
-  @Field(type => String)
-  contains: string;
-
-  @Field(type => String)
-  contains_nocase: string;
-
-  @Field(type => String)
-  starts_with: string;
-
-  @Field(type => String)
-  starts_with_nocase: string;
-
-  @Field(type => String)
-  ends_with: string;
-
-  @Field(type => String)
-  ends_with_nocase: string;
 }

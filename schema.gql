@@ -2,6 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""recipeFieldConditionResult"""
+type RecipeFieldConditionResult {
+  id: Boolean!
+  title: Boolean!
+  description: Boolean!
+  creationDate: Boolean!
+  ingredients: Boolean!
+  forNumPeople: Boolean!
+}
+
 """recipe"""
 type Recipe {
   id: ID!
@@ -10,12 +20,23 @@ type Recipe {
   creationDate: Date!
   ingredients: [String!]!
   forNumPeople: Int!
+  fieldConditionResult: RecipeFieldConditionResult!
 }
 
 """Date custom scalar type"""
 scalar Date
 
 type Query {
-  recipe(id: String!): Recipe!
-  recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+  recipe(id: String!, stringCondition: FieldConditionStringInput!, numberCondition: FieldConditionNumberInput!): Recipe!
+  recipes(skip: Int = 0, take: Int = 25, stringCondition: FieldConditionStringInput = {}, numberCondition: FieldConditionNumberInput = {}): [Recipe!]!
+}
+
+input FieldConditionStringInput {
+  eq: String
+  contains: String
+}
+
+input FieldConditionNumberInput {
+  eq: Int
+  gte: Int
 }

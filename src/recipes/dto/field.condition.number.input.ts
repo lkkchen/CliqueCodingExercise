@@ -1,22 +1,14 @@
-import { ArgsType, Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
-@ObjectType()
 export class FieldConditionNumberInput {
-  @Field(type => Int)
-  eq: number;
 
+  @Field({ nullable: true })
   @Field(type => Int)
-  gt: number;
+  eq?: number;
 
+  @Field({ nullable: true })
   @Field(type => Int)
-  gte: number;
-
-  @Field(type => Int)
-  lt: number;
-
-  @Field(type => Int)
-  lte: number;
+  gte?: number;
 
 }
-
