@@ -2,13 +2,10 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class FieldConditionNumberInput {
-
-  @Field({ nullable: true })
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   eq?: number;
 
-  @Field({ nullable: true })
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   gte?: number;
 
 }

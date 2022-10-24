@@ -15,8 +15,8 @@ export class RecipesResolver {
   @Query((returns) => Recipe)
   async recipe(
     @Args('id') id: string,
-    @Args('stringCondition') stringCondition: FieldConditionStringInput,
-    @Args('numberCondition') numberCondition: FieldConditionNumberInput,
+    @Args({name: 'stringCondition', nullable: true}) stringCondition: FieldConditionStringInput,
+    @Args({name: 'numberCondition', nullable: true}) numberCondition: FieldConditionNumberInput,
   ): Promise<Recipe> {
     const recipe = await this.recipesService.findOneById(id);
     if (!recipe) {

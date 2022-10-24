@@ -2,12 +2,10 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class FieldConditionStringInput {
-  @Field({ nullable: true })
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   eq?: string;
 
-  @Field({ nullable: true })
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   contains?: string;
 
 }

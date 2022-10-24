@@ -27,7 +27,7 @@ type Recipe {
 scalar Date
 
 type Query {
-  recipe(id: String!, stringCondition: FieldConditionStringInput!, numberCondition: FieldConditionNumberInput!): Recipe!
+  recipe(id: String!, stringCondition: FieldConditionStringInput, numberCondition: FieldConditionNumberInput): Recipe!
   recipes(skip: Int = 0, take: Int = 25, stringCondition: FieldConditionStringInput = {}, numberCondition: FieldConditionNumberInput = {}): [Recipe!]!
 }
 
