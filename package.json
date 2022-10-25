@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "pre_start": "node --inspect --require ts-node/register ./src/fcg/fcg.generate.ts && nest start",
+    "pre_start": "node --inspect --require ts-node/register ./src/fcg/fcg.generate.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
