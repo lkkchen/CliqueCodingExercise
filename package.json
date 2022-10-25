@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "node --inspect --require ts-node/register ./src/fcg/fcg.generate.ts && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node --inspect --require ts-node/register ./src/fcg/fcg.generate.ts && nest start",
     "start:dev": "nest start --watch",
