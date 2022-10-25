@@ -1,21 +1,17 @@
-import { Injectable } from '@nestjs/common';
 import {readFileSync, writeFileSync} from "node:fs"
+import { loadFiles } from './file.loader';
+import {
+  classDataFieldMap,
+} from "./field.condition.metadata"
+
+const targetModelDirPath = `./src/recipes/models`;
 
 
-// key: className, value = properties
-export const classDataFieldMap = new Map<string,  Array<string>>;
+function loadModelFiles(){
+  const fileList = loadFiles(targetModelDirPath);
+  return fileList.filter((it)=>(it.name.indexOf(".fcg") === -1));
+}
 
-export const saveFieldConditionMetaData = (className: string, property: string) => {
-  if(!classDataFieldMap.has(className)){
-    classDataFieldMap.set(className, []);
-  }
-
-  const properties = classDataFieldMap.get(className);
-  if(properties.indexOf(property) === -1){
-    properties.push(property);
-  }
-
-};
 
 
 function reWriteSourceFile(clsName, properties) {
@@ -38,7 +34,7 @@ export class ${fdClassName} {
 
   const fieldConditionFileName = `${clsName.toLowerCase()}.fcg`;
 
-  writeFileSync(`./src/recipes/models/${fieldConditionFileName}.ts`, template);
+  writeFileSync(`${targetModelDirPath}/${fieldConditionFileName}.ts`, template);
 
   const originFile = readFileSync(`./src/recipes/models/${clsName.toLowerCase()}.model.ts`);
   const fStrArr = originFile.toString().split("");
@@ -76,17 +72,24 @@ export class ${fdClassName} {
   const findFileStr = `import { ${fdClassName} } from './${fieldConditionFileName}'\n${dpStr}\n
   @Field((type) => ${fdClassName})
   fieldConditionResult?: ${fdClassName};\n}`;
-  writeFileSync(`./src/recipes/models/${clsName.toLowerCase()}.model.ts`, findFileStr);
+  writeFileSync(`${targetModelDirPath}/${clsName.toLowerCase()}.model.ts`, findFileStr);
 }
 
-@Injectable()
-export class FcgService {
-  constructor() {
-    console.log(`generating model field condition class and rewriting...`);
-    for(const [clsName, pks] of classDataFieldMap.entries()){
-      reWriteSourceFile(clsName, pks);
-    }
-    console.log(`generate success, please restart your app.`);
+
+async function running(){
+  const modelFiles = loadModelFiles();
+
+  for(const file of modelFiles){
+    await import(file.filePath);
+
   }
 
+  console.log(classDataFieldMap);
+  console.log(`generating model field condition class and rewriting...`);
+  for(const [clsName, pks] of classDataFieldMap.entries()){
+    reWriteSourceFile(clsName, pks);
+  }
+  console.log(`generate success, starting app...`);
 }
+
+running();

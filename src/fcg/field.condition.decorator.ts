@@ -1,5 +1,5 @@
 
-import {saveFieldConditionMetaData} from "./fcg.service"
+import {saveFieldConditionMetaData} from "./field.condition.metadata"
 
 export function FieldCondition(className: string): PropertyDecorator {
   return function(target, propertyKey) {
