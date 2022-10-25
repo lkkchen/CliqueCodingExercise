@@ -1,4 +1,4 @@
-import { RecipeFieldConditionResult } from './recipe.fcg'
+import { RecipeFieldConditionRes } from '../dto/recipe.field.condition.res'
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {FieldCondition} from '../../fcg/field.condition.decorator'
 import BaseModel from "../../fcg/base.model"
@@ -30,6 +30,6 @@ export class Recipe extends BaseModel{
   forNumPeople: number;
 
 
-  @Field((type) => RecipeFieldConditionResult)
-  fieldConditionResult?: RecipeFieldConditionResult;
+  @Field((type) => RecipeFieldConditionRes)
+  fieldConditionResult?: RecipeFieldConditionRes;
 }

@@ -5,8 +5,8 @@ import { RecipesArgs } from './dto/recipes.args';
 import { Recipe } from './models/recipe.model';
 import { RecipesService } from './recipes.service';
 
-import {FieldConditionStringInput} from "./dto/field.condition.string.input"
-import {FieldConditionNumberInput} from "./dto/field.condition.number.input"
+import {RecipeFieldStringCdInputFcg} from "./dto/recipe.field.string.cd.input.fcg"
+import {RecipeFieldNumberCdInputFcg} from "./dto/recipe.field.number.cd.input.fcg"
 
 @Resolver((of) => Recipe)
 export class RecipesResolver {
@@ -15,20 +15,19 @@ export class RecipesResolver {
   @Query((returns) => Recipe)
   async recipe(
     @Args('id') id: string,
-    @Args({name: 'stringCondition', nullable: true}) stringCondition: FieldConditionStringInput,
-    @Args({name: 'numberCondition', nullable: true}) numberCondition: FieldConditionNumberInput,
+    @Args({name: 'stringCondition', nullable: true}) stringCondition: RecipeFieldStringCdInputFcg,
+    @Args({name: 'numberCondition', nullable: true}) numberCondition: RecipeFieldNumberCdInputFcg,
   ): Promise<Recipe> {
     const recipe = await this.recipesService.findOneById(id);
     if (!recipe) {
       throw new NotFoundException(id);
     }
 
-    const finalCondition = {
-      ...stringCondition,
-      ...numberCondition,
-    };
 
-    recipe.fieldConditionResult = checkFieldCondition(finalCondition, recipe);
+    recipe.fieldConditionResult = {
+      stringConditionRes: checkFieldCondition(stringCondition, recipe),
+      numberConditionRes: checkFieldCondition(numberCondition, recipe),
+    };
     console.log(recipe);
     return recipe;
   }
@@ -42,7 +41,8 @@ export class RecipesResolver {
 }
 
 
-function checkFieldCondition(strCondition, sourceData): any {
+function checkFieldCondition(fieldConditionDescObj, sourceData): any {
+
   const operatorMap = {
     eq: (param) => {
       return function(target) {
@@ -70,35 +70,19 @@ function checkFieldCondition(strCondition, sourceData): any {
 
   };
 
-  function genCheckFuncList(hasGiveCondition) {
-    const res = [];
-    if(!hasGiveCondition) return res;
-    const giveCdKeys = Object.keys(hasGiveCondition);
-    if(giveCdKeys.length){
-      for(const opKey of giveCdKeys){
-        if(!operatorMap[opKey]){
-          continue;
-        }
+  const fieldConditionRes = {};
+  for(const [field, conditionDescObj] of Object.entries(fieldConditionDescObj)){
+    fieldConditionRes[field] = {};
+    const nowSourceDataFieldValue = sourceData[field];
+    for(const [operator, val] of Object.entries(conditionDescObj)){
+      fieldConditionRes[field][operator] = null;
 
-        res.push( operatorMap[opKey](hasGiveCondition[opKey]) );
+      if(operatorMap[operator]){
+        const func = operatorMap[operator](val);
+        fieldConditionRes[field][operator] = func(nowSourceDataFieldValue);
       }
     }
-    return res;
   }
 
-  const checkFuncList = genCheckFuncList(strCondition);
-  function runCheckField(fieldValue) {
-    for(const func of checkFuncList){
-      if(func(fieldValue)){
-        return true;
-      }
-    }
-    return false;
-  }
-
-  const fieldConditionResult = {};
-  for(const [field, value] of Object.entries(sourceData)){
-    fieldConditionResult[field] = runCheckField(value);
-  }
-  return fieldConditionResult;
+  return fieldConditionRes;
 }

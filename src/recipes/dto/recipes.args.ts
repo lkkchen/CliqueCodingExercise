@@ -1,8 +1,6 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
 
-import {FieldConditionStringInput} from "./field.condition.string.input"
-import {FieldConditionNumberInput} from "./field.condition.number.input"
 
 @ArgsType()
 export class RecipesArgs {
@@ -15,9 +13,4 @@ export class RecipesArgs {
   @Max(50)
   take = 25;
 
-  @Field(type => FieldConditionStringInput)
-  stringCondition? = {};
-
-  @Field(type => FieldConditionNumberInput)
-  numberCondition? = {};
 }

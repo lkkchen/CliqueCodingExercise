@@ -2,14 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""RecipeFieldConditionResult"""
-type RecipeFieldConditionResult {
-  id: Boolean!
-  title: Boolean!
-  description: Boolean!
-  creationDate: Boolean!
-  ingredients: Boolean!
-  forNumPeople: Boolean!
+"""FieldConditionStringRes"""
+type FieldConditionStringRes {
+  eq: Boolean
+  contains: Boolean
+}
+
+"""RecipeFieldStringCdResFcg"""
+type RecipeFieldStringCdResFcg {
+  id: FieldConditionStringRes
+  title: FieldConditionStringRes
+  description: FieldConditionStringRes
+  creationDate: FieldConditionStringRes
+  ingredients: FieldConditionStringRes
+  forNumPeople: FieldConditionStringRes
+}
+
+"""FieldConditionNumberRes"""
+type FieldConditionNumberRes {
+  eq: Boolean
+  gte: Boolean
+}
+
+"""RecipeFieldNumberCdResFcg"""
+type RecipeFieldNumberCdResFcg {
+  id: FieldConditionNumberRes
+  title: FieldConditionNumberRes
+  description: FieldConditionNumberRes
+  creationDate: FieldConditionNumberRes
+  ingredients: FieldConditionNumberRes
+  forNumPeople: FieldConditionNumberRes
+}
+
+"""RecipeFieldConditionRes"""
+type RecipeFieldConditionRes {
+  stringConditionRes: RecipeFieldStringCdResFcg
+  numberConditionRes: RecipeFieldNumberCdResFcg
 }
 
 """recipe"""
@@ -20,20 +48,40 @@ type Recipe {
   creationDate: Date!
   ingredients: [String!]!
   forNumPeople: Int!
-  fieldConditionResult: RecipeFieldConditionResult!
+  fieldConditionResult: RecipeFieldConditionRes!
 }
 
 """Date custom scalar type"""
 scalar Date
 
 type Query {
-  recipe(id: String!, stringCondition: FieldConditionStringInput, numberCondition: FieldConditionNumberInput): Recipe!
-  recipes(skip: Int = 0, take: Int = 25, stringCondition: FieldConditionStringInput = {}, numberCondition: FieldConditionNumberInput = {}): [Recipe!]!
+  recipe(id: String!, stringCondition: RecipeFieldStringCdInputFcg, numberCondition: RecipeFieldNumberCdInputFcg): Recipe!
+  recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+}
+
+"""RecipeFieldStringCdInputFcg"""
+input RecipeFieldStringCdInputFcg {
+  id: FieldConditionStringInput
+  title: FieldConditionStringInput
+  description: FieldConditionStringInput
+  creationDate: FieldConditionStringInput
+  ingredients: FieldConditionStringInput
+  forNumPeople: FieldConditionStringInput
 }
 
 input FieldConditionStringInput {
   eq: String
   contains: String
+}
+
+"""RecipeFieldNumberCdInputFcg"""
+input RecipeFieldNumberCdInputFcg {
+  id: FieldConditionNumberInput
+  title: FieldConditionNumberInput
+  description: FieldConditionNumberInput
+  creationDate: FieldConditionNumberInput
+  ingredients: FieldConditionNumberInput
+  forNumPeople: FieldConditionNumberInput
 }
 
 input FieldConditionNumberInput {
