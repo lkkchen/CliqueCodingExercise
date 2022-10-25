@@ -1,44 +1,32 @@
+import { RecipeFieldConditionResult } from './recipe.fcg'
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-
-@ObjectType({ description: 'recipeFieldConditionResult' })
-export class RecipeFieldConditionResult {
-  @Field((type) => Boolean)
-  id: boolean;
-
-  @Field((type) => Boolean)
-  title: boolean;
-
-  @Field((type) => Boolean)
-  description: boolean;
-
-  @Field((type) => Boolean)
-  creationDate: boolean;
-
-  @Field((type) => Boolean)
-  ingredients: boolean;
-
-  @Field((type) => Boolean)
-  forNumPeople: boolean;
-}
+import {FieldCondition} from '../../fcg/field.condition.decorator'
+import BaseModel from "../../fcg/base.model"
 
 @ObjectType({ description: 'recipe' })
-export class Recipe {
+export class Recipe extends BaseModel{
   @Field((type) => ID)
+  @FieldCondition("Recipe")
   id: string;
 
   @Field()
+  @FieldCondition("Recipe")
   title: string;
 
   @Field({ nullable: true })
+  @FieldCondition("Recipe")
   description?: string;
 
   @Field()
+  @FieldCondition("Recipe")
   creationDate: Date;
 
   @Field((type) => [String])
+  @FieldCondition("Recipe")
   ingredients: string[];
 
   @Field((type) => Int)
+  @FieldCondition("Recipe")
   forNumPeople: number;
 
   @Field((type) => RecipeFieldConditionResult)

@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""recipeFieldConditionResult"""
+"""RecipeFieldConditionResult"""
 type RecipeFieldConditionResult {
   id: Boolean!
   title: Boolean!

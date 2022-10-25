@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { RecipesArgs } from './dto/recipes.args';
 
-import { Recipe, RecipeFieldConditionResult } from './models/recipe.model';
+import { Recipe } from './models/recipe.model';
 import { RecipesService } from './recipes.service';
 
 import {FieldConditionStringInput} from "./dto/field.condition.string.input"
@@ -42,7 +42,7 @@ export class RecipesResolver {
 }
 
 
-function checkFieldCondition(strCondition, sourceData): RecipeFieldConditionResult {
+function checkFieldCondition(strCondition, sourceData): any {
   const operatorMap = {
     eq: (param) => {
       return function(target) {
@@ -96,7 +96,7 @@ function checkFieldCondition(strCondition, sourceData): RecipeFieldConditionResu
     return false;
   }
 
-  const fieldConditionResult = new RecipeFieldConditionResult;
+  const fieldConditionResult = {};
   for(const [field, value] of Object.entries(sourceData)){
     fieldConditionResult[field] = runCheckField(value);
   }
