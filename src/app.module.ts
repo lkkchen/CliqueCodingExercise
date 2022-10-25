@@ -7,14 +7,15 @@ import { FcgModule } from './fcg/fcg.module';
 @Module({
   imports: [
     RecipesModule,
-
-    FcgModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
       debug: true,
       playground: true,
     }),
+
+    // must be the first load module
+    FcgModule,
   ],
 })
 export class AppModule {}
