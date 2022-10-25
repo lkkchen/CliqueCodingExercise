@@ -29,7 +29,6 @@ export class Recipe extends BaseModel{
   @FieldCondition("Recipe")
   forNumPeople: number;
 
-
-  @Field((type) => RecipeFieldCdResFcg)
-  fieldConditionResult?: RecipeFieldCdResFcg;
+@Field((type) => RecipeFieldCdResFcg)
+fieldConditionResult?: RecipeFieldCdResFcg;
 }

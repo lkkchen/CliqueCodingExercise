@@ -36,6 +36,7 @@ function createFieldInputFcgFiles(clsName, properties) {
     const fileContent = `
 import { Field, InputType } from '@nestjs/graphql';
 import {FieldCondition${theType.bName}Input} from "./field.condition.${theType.sName}.input"
+
 @InputType({ description: '${clsName}Field${theType.bName}CdInputFcg' })
 export class ${clsName}Field${theType.bName}CdInputFcg {
   ${itemLines.join("")}
@@ -68,9 +69,10 @@ function createFieldResFcgFiles(clsName, properties) {
     }
 
     const fileContent = `
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import {FieldCondition${theType.bName}Res} from "./field.condition.${theType.sName}.res"
-@InputType({ description: '${clsName}Field${theType.bName}CdResFcg' })
+
+@ObjectType({ description: '${clsName}Field${theType.bName}CdResFcg' })
 export class ${clsName}Field${theType.bName}CdResFcg {
   ${itemLines.join("")}
 }
@@ -92,8 +94,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { ${clsName}FieldStringCdResFcg } from './${clsName.toLowerCase()}.field.string.cd.res.fcg';
 import { ${clsName}FieldNumberCdResFcg } from './${clsName.toLowerCase()}.field.number.cd.res.fcg';
 
-@ObjectType({ description: '${clsName}FieldConditionRes' })
-export class ${clsName}FieldConditionRes {
+@ObjectType({ description: '${clsName}FieldCdRes' })
+export class ${clsName}FieldCdResFcg {
 
   @Field(type => ${clsName}FieldStringCdResFcg, { nullable: true })
   stringConditionRes?: ${clsName}FieldStringCdResFcg;
@@ -125,7 +127,7 @@ function reWriteSourceModelFile(clsName) {
 
   let dpStr = fStrArr.join("");
 
-  const headImportStr = `import { ${fdClassName} } from '${targetDtoDirPath}/${clsName.toLowerCase()}.field.cd.res.fcg'`;
+  const headImportStr = `import { ${fdClassName} } from '../dto/${clsName.toLowerCase()}.field.cd.res.fcg'`;
   const lastDescStr1  = `@Field((type) => ${fdClassName})`;
   const lastDescStr2  = `fieldConditionResult?: ${fdClassName};`;
 
@@ -144,7 +146,7 @@ function reWriteSourceModelFile(clsName) {
 
   dpStr = dpStrArr.join("");
 
-  const finalFileStr = `${headImportStr}\n${dpStr}\n${lastDescStr1}\n${lastDescStr2};\n}`;
+  const finalFileStr = `${headImportStr}\n${dpStr}\n${lastDescStr1}\n${lastDescStr2}\n}`;
   writeFileSync(`${targetModelDirPath}/${clsName.toLowerCase()}.model.ts`, finalFileStr);
 }
 
@@ -162,6 +164,7 @@ async function running(){
   for(const [clsName, pks] of classDataFieldMap.entries()){
     createFieldInputFcgFiles(clsName, pks);
     createFieldResFcgFiles(clsName, pks);
+    createResFcgFiles(clsName);
     reWriteSourceModelFile(clsName);
   }
   console.log(`generate success, starting app...`);

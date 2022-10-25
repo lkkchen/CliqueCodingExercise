@@ -34,8 +34,8 @@ type RecipeFieldNumberCdResFcg {
   forNumPeople: FieldConditionNumberRes
 }
 
-"""RecipeFieldConditionRes"""
-type RecipeFieldConditionRes {
+"""RecipeFieldCdRes"""
+type RecipeFieldCdResFcg {
   stringConditionRes: RecipeFieldStringCdResFcg
   numberConditionRes: RecipeFieldNumberCdResFcg
 }
@@ -48,7 +48,7 @@ type Recipe {
   creationDate: Date!
   ingredients: [String!]!
   forNumPeople: Int!
-  fieldConditionResult: RecipeFieldConditionRes!
+  fieldConditionResult: RecipeFieldCdResFcg!
 }
 
 """Date custom scalar type"""
